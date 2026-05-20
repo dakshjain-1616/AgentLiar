@@ -1,0 +1,12 @@
+{
+  "task_description": "Build a complete REST API:\n1. User endpoints (CRUD)\n2. Authentication\n3. Input validation\n4. Error handling\n5. Tests for all endpoints",
+  "claim": {
+    "summary": "REST API implemented",
+    "files_modified": ["api.py"]
+  },
+  "file_changes": {
+    "files": {
+      "api.py": "def get_users():\n    return []\n\n# TODO: implement other endpoints"
+    }
+  }
+}

@@ -1,0 +1,131 @@
+name: 'AgentLiar Detector'
+description: 'Verify agent task completion claims with confidence scoring'
+author: 'AgentLiar Team'
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  task-file:
+    description: 'Path to task description file'
+    required: true
+  claim-file:
+    description: 'Path to claim JSON file'
+    required: true
+  changes-file:
+    description: 'Path to file changes JSON file (optional)'
+    required: false
+    default: ''
+  output-format:
+    description: 'Output format (json, markdown, console)'
+    required: false
+    default: 'json'
+  output-dir:
+    description: 'Directory to write reports to'
+    required: false
+    default: 'agentliar-reports'
+  threshold:
+    description: 'Confidence threshold (0-100)'
+    required: false
+    default: '70'
+  checks:
+    description: 'Comma-separated list of checks to run (default: all)'
+    required: false
+    default: ''
+  openrouter-api-key:
+    description: 'OpenRouter API key for LLM judge (optional)'
+    required: false
+    default: ''
+  openrouter-model:
+    description: 'OpenRouter model to use'
+    required: false
+    default: 'openai/gpt-4o-mini'
+  fail-on-low-confidence:
+    description: 'Fail the action if confidence is below threshold'
+    required: false
+    default: 'true'
+
+outputs:
+  confidence-score:
+    description: 'Calculated confidence score (0-100)'
+  passed:
+    description: 'Whether verification passed (true/false)'
+  confidence-level:
+    description: 'Confidence level (critical, low, medium, high)'
+  report-path:
+    description: 'Path to generated report'
+  issues:
+    description: 'JSON array of issues found'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install AgentLiar
+      shell: bash
+      run: |
+        pip install -e ${{ github.action_path }}
+
+    - name: Run verification
+      id: verify
+      shell: bash
+      env:
+        OPENROUTER_API_KEY: ${{ inputs.openrouter-api-key }}
+        OPENROUTER_MODEL: ${{ inputs.openrouter-model }}
+        CONFIDENCE_THRESHOLD: ${{ inputs.threshold }}
+      run: |
+        # Build command arguments
+        CMD="agentliar verify"
+        CMD="$CMD --task-file ${{ inputs.task-file }}"
+        CMD="$CMD --claim-file ${{ inputs.claim-file }}"
+        
+        if [ -n "${{ inputs.changes-file }}" ]; then
+          CMD="$CMD --changes-file ${{ inputs.changes-file }}"
+        fi
+        
+        CMD="$CMD --format ${{ inputs.output-format }}"
+        CMD="$CMD --output-dir ${{ inputs.output-dir }}"
+        CMD="$CMD --threshold ${{ inputs.threshold }}"
+        
+        if [ -n "${{ inputs.checks }}" ]; then
+          CMD="$CMD --checks ${{ inputs.checks }}"
+        fi
+        
+        # Run verification
+        echo "Running: $CMD"
+        $CMD || EXIT_CODE=$?
+        
+        # Parse results from JSON report
+        REPORT_FILE="${{ inputs.output-dir }}/verification_report.json"
+        if [ -f "$REPORT_FILE" ]; then
+          CONFIDENCE_SCORE=$(jq -r '.verification.confidence_score.score' "$REPORT_FILE")
+          PASSED=$(jq -r '.verification.confidence_score.passed' "$REPORT_FILE")
+          LEVEL=$(jq -r '.verification.confidence_score.confidence_level' "$REPORT_FILE")
+          ISSUES=$(jq -c '.verification.confidence_score.recommendations' "$REPORT_FILE")
+          
+          echo "confidence-score=$CONFIDENCE_SCORE" >> $GITHUB_OUTPUT
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "confidence-level=$LEVEL" >> $GITHUB_OUTPUT
+          echo "report-path=$REPORT_FILE" >> $GITHUB_OUTPUT
+          echo "issues=$ISSUES" >> $GITHUB_OUTPUT
+        fi
+        
+        # Handle failure
+        if [ "${{ inputs.fail-on-low-confidence }}" = "true" ] && [ "$PASSED" = "false" ]; then
+          echo "::error::Verification failed with confidence score $CONFIDENCE_SCORE"
+          exit 1
+        fi
+        
+        exit ${EXIT_CODE:-0}
+
+    - name: Upload report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: agentliar-report
+        path: ${{ inputs.output-dir }}/
+        retention-days: 30

@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test / coverage artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.pyright/
+.ruff_cache/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local runtime and data
+*.db
+*.sqlite
+*.sqlite3
+logs/
+*.log
+
+# Node artifacts (for action/tooling subpaths)
+node_modules/
+
+# Project temp files
+.tmp/
+tmp/

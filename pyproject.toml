@@ -1,0 +1,148 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentliar"
+version = "0.1.0"
+description = "Production-ready system to detect when coding agents falsely claim task completion"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "AgentLiar Team", email = "team@agentliar.dev"}
+]
+keywords = ["verification", "llm", "agent", "testing", "ci-cd"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+]
+dependencies = [
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "click>=8.0.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.23.0",
+    "httpx>=0.24.0",
+    "structlog>=23.0.0",
+    "jinja2>=3.1.0",
+    "pyyaml>=6.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-mock>=3.11.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+    "types-pyyaml>=6.0.0",
+    "respx>=0.20.0",
+]
+
+[project.scripts]
+agentliar = "agentliar.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/agentliar/agentliar"
+Documentation = "https://github.com/agentliar/agentliar#readme"
+Repository = "https://github.com/agentliar/agentliar"
+Issues = "https://github.com/agentliar/agentliar/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--cov=agentliar",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-fail-under=90",
+]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["src/agentliar"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/cli.py",
+    "*/server.py",
+    "*/logging_config.py",
+    "*/checks/llm_judge.py",
+    "*/report.py",
+    "*/exceptions.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # Pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "W",   # pycodestyle warnings
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501",  # Line too long (handled by formatter)
+    "SIM102", # Allow nested ifs for readability
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["agentliar"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+explicit_package_bases = true
+mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false

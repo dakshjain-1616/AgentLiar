@@ -1,0 +1,12 @@
+{
+  "task_description": "Create a hello world function in Python",
+  "claim": {
+    "summary": "Created hello_world function",
+    "files_modified": ["hello.py"]
+  },
+  "file_changes": {
+    "files": {
+      "hello.py": "def hello_world():\n    print('Hello, World!')\n    return 'Hello, World!'"
+    }
+  }
+}

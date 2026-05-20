@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="-apple-system, Segoe UI, Roboto, sans-serif">
+  <defs>
+    <linearGradient id="bgAL" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c0a1d"/><stop offset="1" stop-color="#1a0b2e"/>
+    </linearGradient>
+    <linearGradient id="inAL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#0891b2"/>
+    </linearGradient>
+    <linearGradient id="checkAL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f472b6"/><stop offset="1" stop-color="#9d174d"/>
+    </linearGradient>
+    <linearGradient id="judgeAL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#facc15"/><stop offset="1" stop-color="#a16207"/>
+    </linearGradient>
+    <linearGradient id="scoreAL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#5b21b6"/>
+    </linearGradient>
+    <linearGradient id="outAL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4ade80"/><stop offset="1" stop-color="#15803d"/>
+    </linearGradient>
+    <filter id="shadowAL"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.45"/></filter>
+    <marker id="arrAL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#cbd5e1"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="600" fill="url(#bgAL)"/>
+  <text x="500" y="38" text-anchor="middle" fill="#e2e8f0" font-size="22" font-weight="700">AgentLiar — Completion-Claim Verification Engine</text>
+
+  <!-- Input column -->
+  <g filter="url(#shadowAL)">
+    <rect x="40" y="90" width="180" height="380" rx="18" fill="#11102a" stroke="#22d3ee" stroke-opacity="0.4"/>
+    <text x="130" y="118" text-anchor="middle" fill="#67e8f9" font-size="13" font-weight="700">INPUT</text>
+    <g transform="translate(60,150)"><rect width="140" height="56" rx="12" fill="url(#inAL)"/><text x="70" y="34" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Task</text></g>
+    <g transform="translate(60,225)"><rect width="140" height="56" rx="12" fill="url(#inAL)"/><text x="70" y="34" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Agent Claim</text></g>
+    <g transform="translate(60,300)"><rect width="140" height="56" rx="12" fill="url(#inAL)"/><text x="70" y="34" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">File Changes</text></g>
+  </g>
+
+  <!-- Engine -->
+  <g filter="url(#shadowAL)">
+    <rect x="280" y="90" width="380" height="380" rx="18" fill="#11102a" stroke="#f472b6" stroke-opacity="0.5"/>
+    <text x="470" y="118" text-anchor="middle" fill="#f9a8d4" font-size="13" font-weight="700">VERIFICATION ENGINE</text>
+    <g transform="translate(310,150)"><rect width="320" height="46" rx="10" fill="url(#scoreAL)"/><text x="160" y="29" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">Async Orchestrator</text></g>
+    <g transform="translate(310,215)"><rect width="150" height="58" rx="10" fill="url(#checkAL)"/><text x="75" y="26" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">File Check</text><text x="75" y="44" text-anchor="middle" fill="#fce7f3" font-size="10">local</text></g>
+    <g transform="translate(480,215)"><rect width="150" height="58" rx="10" fill="url(#checkAL)"/><text x="75" y="26" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Test Check</text><text x="75" y="44" text-anchor="middle" fill="#fce7f3" font-size="10">local</text></g>
+    <g transform="translate(310,290)"><rect width="150" height="58" rx="10" fill="url(#checkAL)"/><text x="75" y="26" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Scope Check</text><text x="75" y="44" text-anchor="middle" fill="#fce7f3" font-size="10">local</text></g>
+    <g transform="translate(480,290)"><rect width="150" height="58" rx="10" fill="url(#judgeAL)"/><text x="75" y="26" text-anchor="middle" fill="#1f1304" font-size="13" font-weight="700">LLM Judge</text><text x="75" y="44" text-anchor="middle" fill="#1f1304" font-size="10">OpenRouter</text></g>
+    <g transform="translate(310,370)"><rect width="320" height="56" rx="10" fill="#1e1b4b" stroke="#a78bfa"/><text x="160" y="32" text-anchor="middle" fill="#c4b5fd" font-size="13" font-weight="600">Weighted Aggregation → Score 0–100</text></g>
+  </g>
+
+  <!-- Output -->
+  <g filter="url(#shadowAL)">
+    <rect x="720" y="90" width="240" height="380" rx="18" fill="#11102a" stroke="#4ade80" stroke-opacity="0.5"/>
+    <text x="840" y="118" text-anchor="middle" fill="#86efac" font-size="13" font-weight="700">OUTPUT</text>
+    <g transform="translate(745,160)"><rect width="190" height="56" rx="12" fill="url(#outAL)"/><text x="95" y="34" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">JSON Report</text></g>
+    <g transform="translate(745,235)"><rect width="190" height="56" rx="12" fill="url(#outAL)"/><text x="95" y="34" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Markdown Report</text></g>
+    <g transform="translate(745,310)"><rect width="190" height="56" rx="12" fill="url(#outAL)"/><text x="95" y="34" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Console Output</text></g>
+    <g transform="translate(745,385)"><rect width="190" height="56" rx="12" fill="#0ea5e9"/><text x="95" y="28" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">CI Pass / Fail</text><text x="95" y="46" text-anchor="middle" fill="#bae6fd" font-size="10">based on threshold</text></g>
+  </g>
+
+  <g stroke="#cbd5e1" stroke-width="2" fill="none" marker-end="url(#arrAL)">
+    <path d="M220,178 C250,178 250,173 280,173"/>
+    <path d="M220,253 C250,253 250,173 280,173"/>
+    <path d="M220,328 C250,328 250,173 280,173"/>
+    <path d="M660,398 C690,398 690,188 720,188"/>
+    <path d="M660,398 C690,398 690,263 720,263"/>
+    <path d="M660,398 C690,398 690,338 720,338"/>
+    <path d="M660,398 C690,398 690,413 720,413"/>
+  </g>
+
+  <text x="500" y="555" text-anchor="middle" fill="#64748b" font-size="12">4 independent verification checks · weighted confidence · machine-readable reports for CI</text>
+</svg>
