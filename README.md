@@ -83,7 +83,7 @@ Start the API with `python -m agentliar.server` or `uvicorn agentliar.server:app
 ## ⚙️ Configuration
 
 Create a `.env` file:
-Set `OPENROUTER_API_KEY` and `OPENROUTER_MODEL=openai/gpt-4o-mini` only if you want LLM Judge mode. The check weights must sum to `1.0`, and `CONFIDENCE_THRESHOLD` controls the pass/fail cutoff.
+Set `OPENROUTER_API_KEY` and `OPENROUTER_MODEL` only if you want LLM Judge mode. Recommended judges (May 2026): `anthropic/claude-haiku-4-5` for cheap/fast judging, `anthropic/claude-sonnet-4-6` or `openai/gpt-5.4` for higher-quality judging, `openai/gpt-4.1-mini` for a budget option. The check weights must sum to `1.0`, and `CONFIDENCE_THRESHOLD` controls the pass/fail cutoff.
 
 ## 🧪 Testing
 
@@ -157,4 +157,4 @@ HTTP endpoint: `POST /verify` on the FastAPI server (`agentliar.server`). Reques
 
 ## Models Used
 
-Optional LLM Judge uses runtime-configured `provider/model` IDs (for example OpenRouter-hosted models such as `openai/gpt-4o-mini`). Core checks run fully local without external model dependency.
+Optional LLM Judge uses runtime-configured `provider/model` IDs via OpenRouter. Recommended frontier choices (May 2026): `anthropic/claude-opus-4-7`, `anthropic/claude-sonnet-4-6`, `anthropic/claude-haiku-4-5`, `openai/gpt-5.5`, `openai/gpt-5.4`, `google/gemini-3.1-pro`. Core checks run fully local without any external model dependency.
